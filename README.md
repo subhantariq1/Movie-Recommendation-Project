@@ -58,7 +58,7 @@ A content-based movie recommendation system built with Python, pandas, and sciki
 
 ```python
 # Example: Get recommendations for "The Matrix"
-recommend_movies("The Matrix")
+get_movie_recommendation('The Dark Knight')
 ```
 
 ## Project Structure

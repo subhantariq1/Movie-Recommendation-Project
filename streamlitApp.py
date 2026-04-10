@@ -140,13 +140,13 @@ def build_recommender():
                         break
         return row
 
-    _ = clean1_df.applymap(count_empty_lists).sum(axis=0)
+    _ = clean1_df.map(count_empty_lists).sum(axis=0)
     clean1_df = clean1_df.apply(replace_empty_values, axis=1)
-    _ = clean1_df.applymap(count_empty_lists).sum(axis=0)
+    _ = clean1_df.map(count_empty_lists).sum(axis=0)
 
     clean1_df["overview_key_list"] = movies_df["overview"].apply(lambda x: extract_key_words(x)[1])
-    clean1_df.iloc[:, 1:] = clean1_df.iloc[:, 1:].applymap(no_punc)
-    clean1_df.iloc[:, 1:] = clean1_df.iloc[:, 1:].applymap(lowercase)
+    clean1_df.iloc[:, 1:] = clean1_df.iloc[:, 1:].map(no_punc)
+    clean1_df.iloc[:, 1:] = clean1_df.iloc[:, 1:].map(lowercase)
 
     def remove_stopwords(mylist):
         stop_words = set(stopwords.words("english"))
@@ -160,7 +160,7 @@ def build_recommender():
     clean1_df["keywords_list"] = clean1_df["keywords_list"].apply(remove_stopwords)
 
     cols = ["genres_list", "keywords_list", "prod_companies_list", "cast_list", "director_list"]
-    clean1_df[cols] = clean1_df[cols].applymap(remove_space)
+    clean1_df[cols] = clean1_df[cols].map(remove_space)
 
     tokenizer = RegexpTokenizer(r"\w+")
     clean1_df["year"] = movies_df["release_date"].apply(lambda x: tokenizer.tokenize(x))
@@ -176,7 +176,7 @@ def build_recommender():
     clean1_df["language"] = movies_df["original_language"].apply(lambda x: [x])
 
     df = clean1_df.drop("title", axis=1)
-    df = df.applymap(lambda x: " ".join(x))
+    df = df.map(lambda x: " ".join(x))
     merged_text = df.apply(lambda x: " ".join(x), axis=1)
 
     tfidf = TfidfVectorizer()
